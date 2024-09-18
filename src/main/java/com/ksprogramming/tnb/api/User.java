@@ -1,17 +1,30 @@
 package com.ksprogramming.tnb.api;
 
-import java.util.Date;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+import java.util.Date;
+@Entity
 public class User {
+    @Id
     Long id;
     String login;
     String password;
     String emailConfirmedRegistratior;
     Date edit;
     Date delete;
-    public User(Long id, String login) {
+
+    public User(Long id, String login, String password, String emailConfirmedRegistratior, Date edit, Date delete) {
         this.id = id;
         this.login = login;
+        this.password = password;
+        this.emailConfirmedRegistratior = emailConfirmedRegistratior;
+        this.edit = edit;
+        this.delete = delete;
+    }
+
+    public User() {
+
     }
 
     public Long getId() {
