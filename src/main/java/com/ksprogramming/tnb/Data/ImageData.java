@@ -20,6 +20,13 @@ public class ImageData {
         this.deleteDate = deleteDate;
     }
 
+    public ImageData(Long id, String path, LocalDateTime createDate, LocalDateTime updateDate) {
+        this.id = id;
+        this.path = path;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
+    }
+
     public ImageData(String path, LocalDateTime createDate) {
         this.path = path;
         this.createDate = createDate;
