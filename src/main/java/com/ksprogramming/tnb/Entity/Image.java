@@ -30,6 +30,13 @@ public class Image {
         this.createDate = createDate;
     }
 
+    public Image(Long id, String path, LocalDateTime createDate, LocalDateTime updateDate) {
+        this.id = id;
+        this.path = path;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
+    }
+
     public Long getId() {
         return id;
     }
