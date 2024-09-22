@@ -16,7 +16,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Transactional // Ensures that tests roll back transactions after each test
+@Transactional 
 public class UserServiceIntegrationTest {
 
     @Autowired
@@ -27,17 +27,17 @@ public class UserServiceIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        userRepository.deleteAll(); // Ensure the repository is empty before each test
+        userRepository.deleteAll(); 
     }
 
     @Test
     public void testCreateUser() {
-        UserData userData = new UserData("testUser", "password123", true, "en");
+        UserData userData = new UserData("krystian", "password1234", true, "en");
         UserData createdUser = userService.createUser(userData);
 
         assertThat(createdUser.getId()).isNotNull();
-        assertThat(createdUser.getLogin()).isEqualTo("testUser");
-        assertThat(createdUser.getPassword()).isEqualTo("password123");
+        assertThat(createdUser.getLogin()).isEqualTo("krystian");
+        assertThat(createdUser.getPassword()).isEqualTo("password1234");
         assertThat(createdUser.getEmailConfirmedRegistrator()).isTrue();
         assertThat(createdUser.getLanguage()).isEqualTo("en");
         assertThat(createdUser.getEditDate()).isBeforeOrEqualTo(LocalDateTime.now());
@@ -45,45 +45,45 @@ public class UserServiceIntegrationTest {
 
     @Test
     public void testGetUserById() {
-        UserData userData = new UserData("testUser", "password123", true, "en");
+        UserData userData = new UserData("krystian", "password1234", true, "en");
         UserData createdUser = userService.createUser(userData);
 
         Optional<UserData> retrievedUser = userService.getUserById(createdUser.getId());
 
         assertThat(retrievedUser).isPresent();
-        assertThat(retrievedUser.get().getLogin()).isEqualTo("testUser");
+        assertThat(retrievedUser.get().getLogin()).isEqualTo("krystian");
     }
 
     @Test
     public void testUpdateUser() {
-        UserData userData = new UserData("testUser", "password123", true, "en");
+        UserData userData = new UserData("krystian", "password1234", true, "en");
         UserData createdUser = userService.createUser(userData);
 
         UserData updatedData = new UserData(createdUser.getId(), "updatedUser", "newPassword", false, "fr", LocalDateTime.now(), null);
         UserData updatedUser = userService.updateUser(createdUser.getId(), updatedData);
 
-        assertThat(updatedUser.getLogin()).isEqualTo("updatedUser");
-        assertThat(updatedUser.getPassword()).isEqualTo("newPassword");
+        assertThat(updatedUser.getLogin()).isEqualTo("krystianr");
+        assertThat(updatedUser.getPassword()).isEqualTo("newPassword12345");
         assertThat(updatedUser.getEmailConfirmedRegistrator()).isFalse();
-        assertThat(updatedUser.getLanguage()).isEqualTo("fr");
+        assertThat(updatedUser.getLanguage()).isEqualTo("pl");
     }
 
     @Test
     public void testDeleteUser() {
-        UserData userData = new UserData("testUser", "password123", true, "en");
+        UserData userData = new UserData("krystian", "password1234", true, "en");
         UserData createdUser = userService.createUser(userData);
 
         userService.deleteUser(createdUser.getId());
 
         Optional<UserData> deletedUser = userService.getUserById(createdUser.getId());
         assertThat(deletedUser).isPresent();
-        assertThat(deletedUser.get().getDeleteDate()).isNotNull(); // Check if deleteDate is set
+        assertThat(deletedUser.get().getDeleteDate()).isNotNull(); 
     }
 
     @Test
     public void testGetAllUsers() {
-        UserData user1 = new UserData("user1", "password1", true, "en");
-        UserData user2 = new UserData("user2", "password2", false, "es");
+        UserData user1 = new UserData("krystian", "password1234", true, "en");
+        UserData user2 = new UserData("rafael", "password2345", false, "pl");
         userService.createUser(user1);
         userService.createUser(user2);
 
