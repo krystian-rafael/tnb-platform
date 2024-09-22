@@ -22,14 +22,14 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    // Convert User to UserData (DTO)
+
     private UserData convertToUserData(User user) {
         return new UserData(user.getId(), user.getLogin(), user.getPassword(),
                 user.getEmailConfirmedRegistrator(), user.getLanguage(),
                 user.getEditDate(), user.getDeleteDate());
     }
 
-    // Convert UserData (DTO) to User
+
     private User convertToUser(UserData userData) {
         return new User(userData.getLogin(), userData.getPassword(),
                 userData.getEmailConfirmedRegistrator(), userData.getLanguage());
@@ -43,12 +43,12 @@ public class UserService {
         return convertToUserData(savedUser);
     }
 
-    // Get user by ID
+
     public UserData getUserById(Long id) {
         return userRepository.findById(id).map(this::convertToUserData).orElseThrow(() -> new NoUserException("No user found with id: " + id));
     }
 
-    // Update user details
+
     public UserData updateUser(Long id, UserData updatedData) {
         return userRepository.findById(id).map(user -> {
             user.setLogin(updatedData.getLogin());
@@ -69,7 +69,7 @@ public class UserService {
         });
     }
 
-    // List all users
+
     public List<UserData> getAllUsers() {
         return userRepository.findAll()
                 .stream()
