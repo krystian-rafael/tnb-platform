@@ -48,7 +48,7 @@ public class UserServiceIntegrationTest {
         UserData userData = new UserData("testUser", "password123", true, "en");
         UserData createdUser = userService.createUser(userData);
 
-        Optional<UserData> retrievedUser = userService.getUserById(createdUser.getId());
+        Optional<UserData> retrievedUser = Optional.ofNullable(userService.getUserById(createdUser.getId()));
 
         assertThat(retrievedUser).isPresent();
         assertThat(retrievedUser.get().getLogin()).isEqualTo("testUser");
@@ -75,7 +75,7 @@ public class UserServiceIntegrationTest {
 
         userService.deleteUser(createdUser.getId());
 
-        Optional<UserData> deletedUser = userService.getUserById(createdUser.getId());
+        Optional<UserData> deletedUser = Optional.ofNullable(userService.getUserById(createdUser.getId()));
         assertThat(deletedUser).isPresent();
         assertThat(deletedUser.get().getDeleteDate()).isNotNull(); // Check if deleteDate is set
     }
