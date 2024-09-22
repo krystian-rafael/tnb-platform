@@ -77,7 +77,7 @@ public class UserServiceIntegrationTest {
 
         Optional<UserData> deletedUser = Optional.ofNullable(userService.getUserById(createdUser.getId()));
         assertThat(deletedUser).isPresent();
-        assertThat(deletedUser.get().getDeleteDate()).isNotNull(); // Check if deleteDate is set
+        assertThat(deletedUser.get().getDeleteDate()).isNotNull(); 
     }
 
     @Test
