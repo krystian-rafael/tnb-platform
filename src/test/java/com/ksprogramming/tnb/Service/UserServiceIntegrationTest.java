@@ -16,7 +16,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Transactional // Ensures that tests roll back transactions after each test
+@Transactional 
 public class UserServiceIntegrationTest {
 
     @Autowired
@@ -27,7 +27,7 @@ public class UserServiceIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        userRepository.deleteAll(); // Ensure the repository is empty before each test
+        userRepository.deleteAll(); 
     }
 
     @Test
