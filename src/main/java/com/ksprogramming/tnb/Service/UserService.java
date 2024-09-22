@@ -22,20 +22,17 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-
     private UserData convertToUserData(User user) {
         return new UserData(user.getId(), user.getLogin(), user.getPassword(),
                 user.getEmailConfirmedRegistrator(), user.getLanguage(),
                 user.getEditDate(), user.getDeleteDate());
     }
 
-
     private User convertToUser(UserData userData) {
         return new User(userData.getLogin(), userData.getPassword(),
                 userData.getEmailConfirmedRegistrator(), userData.getLanguage());
     }
 
-    // Create a new user
     public UserData createUser(UserData userData) {
         User user = convertToUser(userData);
         user.setEditDate(LocalDateTime.now());
@@ -43,11 +40,9 @@ public class UserService {
         return convertToUserData(savedUser);
     }
 
-
     public UserData getUserById(Long id) {
         return userRepository.findById(id).map(this::convertToUserData).orElseThrow(() -> new NoUserException("No user found with id: " + id));
     }
-
 
     public UserData updateUser(Long id, UserData updatedData) {
         return userRepository.findById(id).map(user -> {
