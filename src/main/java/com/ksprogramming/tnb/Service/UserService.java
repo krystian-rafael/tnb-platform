@@ -1,16 +1,18 @@
 package com.ksprogramming.tnb.Service;
 import com.ksprogramming.tnb.Data.UserData;
 import com.ksprogramming.tnb.Entity.User;
+import com.ksprogramming.tnb.Exception.NoUserException;
 import com.ksprogramming.tnb.Repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -20,14 +22,14 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    // Convert User to UserData (DTO)
+
     private UserData convertToUserData(User user) {
         return new UserData(user.getId(), user.getLogin(), user.getPassword(),
                 user.getEmailConfirmedRegistrator(), user.getLanguage(),
                 user.getEditDate(), user.getDeleteDate());
     }
 
-    // Convert UserData (DTO) to User
+
     private User convertToUser(UserData userData) {
         return new User(userData.getLogin(), userData.getPassword(),
                 userData.getEmailConfirmedRegistrator(), userData.getLanguage());
@@ -41,12 +43,12 @@ public class UserService {
         return convertToUserData(savedUser);
     }
 
-    // Get user by ID
-    public Optional<UserData> getUserById(Long id) {
-        return userRepository.findById(id).map(this::convertToUserData);
+
+    public UserData getUserById(Long id) {
+        return userRepository.findById(id).map(this::convertToUserData).orElseThrow(() -> new NoUserException("No user found with id: " + id));
     }
 
-    // Update user details
+
     public UserData updateUser(Long id, UserData updatedData) {
         return userRepository.findById(id).map(user -> {
             user.setLogin(updatedData.getLogin());
@@ -59,7 +61,7 @@ public class UserService {
         }).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    // Soft delete a user
+   @Transactional
     public void deleteUser(Long id) {
         userRepository.findById(id).ifPresent(user -> {
             user.setDeleteDate(LocalDateTime.now());
@@ -67,7 +69,7 @@ public class UserService {
         });
     }
 
-    // List all users
+
     public List<UserData> getAllUsers() {
         return userRepository.findAll()
                 .stream()
