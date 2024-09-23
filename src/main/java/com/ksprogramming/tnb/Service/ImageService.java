@@ -30,7 +30,7 @@ public class ImageService implements ImageServiceInterface{
         return ImageMapper.EntityToData(imageRepository.findById(id).orElseThrow(() -> new NoImagePathException("No image found with id: " + id)));
     }
     public List<ImageData> findAllImages() {
-        return ImageMapper.EntitiesToData(imageRepository.findAll());
+        return ImageMapper.EntitiesToData(imageRepository.findAllImageNotDeleted());
     }
     public void updateImagePath(ImageData imageData) {
         imageRepository.save(ImageMapper.DataToEntity(imageData));

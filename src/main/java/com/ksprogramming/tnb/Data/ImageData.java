@@ -67,4 +67,38 @@ public class ImageData {
     public void setDeleteDate(LocalDateTime deleteDate) {
         this.deleteDate = deleteDate;
     }
+
+    public static ImageDataBuilder builder(){
+        return new ImageDataBuilder();
+    }
+    public static class ImageDataBuilder {
+        private Long id;
+        private String path;
+        private LocalDateTime createDate;
+        private LocalDateTime updateDate;
+        private LocalDateTime deleteDate;
+        public ImageDataBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+        public ImageDataBuilder path(String path) {
+            this.path = path;
+            return this;
+        }
+        public ImageDataBuilder createDate(LocalDateTime createDate) {
+            this.createDate = createDate;
+            return this;
+        }
+        public ImageDataBuilder updateDate(LocalDateTime updateDate) {
+            this.updateDate = updateDate;
+            return this;
+        }
+        public ImageDataBuilder deleteDate(LocalDateTime deleteDate) {
+            this.deleteDate = deleteDate;
+            return this;
+        }
+        public ImageData build() {
+            return new ImageData(id, path, createDate, updateDate, deleteDate);
+        }
+    }
 }

@@ -8,7 +8,13 @@ import java.util.List;
 
 public class ImageMapper {
     public static ImageData EntityToData(Image image) {
-        return new ImageData(image.getId(), image.getPath(), image.getCreateDate(), image.getUpdateDate(), image.getDeleteDate());
+        return ImageData.builder()
+                .id(image.getId())
+                .path(image.getPath())
+                .createDate(image.getCreateDate())
+                .updateDate(image.getUpdateDate())
+                .deleteDate(image.getDeleteDate())
+                .build();
     }
     public static List<ImageData> EntitiesToData(List<Image> images) {
         List<ImageData> imagesData = new ArrayList<>();
@@ -17,6 +23,12 @@ public class ImageMapper {
     return imagesData;
     }
     public static Image DataToEntity(ImageData imageData) {
-        return new Image(imageData.getId(), imageData.getPath(), imageData.getCreateDate(), imageData.getUpdateDate(), imageData.getDeleteDate());
-    }
+        return Image.builder()
+                .id(imageData.getId())
+                .path(imageData.getPath())
+                .createDate(imageData.getCreateDate())
+                .updateDate(imageData.getUpdateDate())
+                .deleteDate(imageData.getDeleteDate())
+                .build();
+        }
 }

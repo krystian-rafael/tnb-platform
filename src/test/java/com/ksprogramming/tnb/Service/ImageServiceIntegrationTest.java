@@ -2,8 +2,6 @@ package com.ksprogramming.tnb.Service;
 
 import com.ksprogramming.tnb.Data.ImageData;
 import com.ksprogramming.tnb.Repository.ImageRepository;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +11,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -98,10 +95,13 @@ class ImageServiceIntegrationTest {
     void deleteImagePath() {
         //GIVEN
         ImageData imageData = imageService.createImagePath("dwa.jpeg");
+        ImageData imageDataSecond = imageService.createImagePath("trzy.jpeg");
         imageService.deleteImagePath(imageData.getId());
         //EXPECTED
         ImageData foundImage = imageService.getImagePath(imageData.getId());
+        List<ImageData> results = imageService.findAllImages();
         //EXPECTED
+        assertEquals(1, results.size());
         assertNotNull(foundImage.getDeleteDate());
         assertEquals(imageData.getId(), foundImage.getId());
         assertEquals(imageData.getPath(), foundImage.getPath());
