@@ -15,21 +15,36 @@ public class User {
     private Long id;
     private String login;
     private String password;
-    private String emailConfirmedRegistrator;
+    private boolean emailConfirmedRegistrator;
+    private String language;
     private LocalDateTime editDate;
     private LocalDateTime deleteDate;
 
-    public User() {
+    public User(String login, String password, boolean emailConfirmedRegistrator) {
     }
 
-    public User(Long id, String login, String password, String emailConfirmedRegistrator, LocalDateTime editDate, LocalDateTime deleteDate) {
+    public User(Long id, String login, String password, boolean emailConfirmedRegistrator, String language,LocalDateTime editDate, LocalDateTime deleteDate) {
         this.id = id;
         this.login = login;
         this.password = password;
         this.emailConfirmedRegistrator = emailConfirmedRegistrator;
+        this.language = language;
         this.editDate = editDate;
         this.deleteDate = deleteDate;
     }
+
+    public User(String login, String password, boolean emailConfirmedRegistrator, String language) {
+        this.login = login;
+        this.password = password;
+        this.emailConfirmedRegistrator = emailConfirmedRegistrator;
+        this.language = language;
+
+    }
+
+    public User() {
+
+    }
+
 
     public void setId(Long id) {
         this.id = id;
@@ -55,12 +70,20 @@ public class User {
         this.password = password;
     }
 
-    public String getEmailConfirmedRegistrator() {
+    public boolean getEmailConfirmedRegistrator() {
         return emailConfirmedRegistrator;
     }
 
-    public void setEmailConfirmedRegistrator(String emailConfirmedRegistrator) {
+    public void setEmailConfirmedRegistrator(boolean emailConfirmedRegistrator) {
         this.emailConfirmedRegistrator = emailConfirmedRegistrator;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     public LocalDateTime getEditDate() {
