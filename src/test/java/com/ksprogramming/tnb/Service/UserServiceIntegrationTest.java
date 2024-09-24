@@ -1,13 +1,14 @@
 package com.ksprogramming.tnb.Service;
+
 import com.ksprogramming.tnb.Data.UserData;
-import com.ksprogramming.tnb.Entity.User;
 import com.ksprogramming.tnb.Repository.UserRepository;
-import com.ksprogramming.tnb.Service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,9 +17,9 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Transactional
-public class UserServiceIntegrationTest {
-
+@RunWith(SpringRunner.class)
+@TestPropertySource("classpath:application-integrationtest.properties")
+class UserServiceIntegrationTest {
     @Autowired
     private UserService userService;
 
