@@ -16,7 +16,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Transactional 
+@Transactional
 public class UserServiceIntegrationTest {
 
     @Autowired
@@ -27,7 +27,7 @@ public class UserServiceIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        userRepository.deleteAll(); 
+        userRepository.deleteAll();
     }
 
     @Test
@@ -77,7 +77,7 @@ public class UserServiceIntegrationTest {
 
         Optional<UserData> deletedUser = Optional.ofNullable(userService.getUserById(createdUser.getId()));
         assertThat(deletedUser).isPresent();
-        assertThat(deletedUser.get().getDeleteDate()).isNotNull(); 
+        assertThat(deletedUser.get().getDeleteDate()).isNotNull(); // Check if deleteDate is set
     }
 
     @Test
