@@ -13,7 +13,5 @@ public interface UserServiceInterface {
     public UserData updateUser(Long id, UserData updatedData);
     public void deleteUser(Long id);
     public List<UserData> getAllUsers();
-
-
-
+    
 }
