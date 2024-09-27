@@ -17,18 +17,21 @@ public class User {
     private String password;
     private boolean emailConfirmedRegistrator;
     private String language;
+
+    private LocalDateTime createDate;
     private LocalDateTime editDate;
     private LocalDateTime deleteDate;
 
     public User(String login, String password, boolean emailConfirmedRegistrator) {
     }
 
-    public User(Long id, String login, String password, boolean emailConfirmedRegistrator, String language,LocalDateTime editDate, LocalDateTime deleteDate) {
+    public User(Long id, String login, String password, boolean emailConfirmedRegistrator, String language, LocalDateTime createDate, LocalDateTime editDate, LocalDateTime deleteDate) {
         this.id = id;
         this.login = login;
         this.password = password;
         this.emailConfirmedRegistrator = emailConfirmedRegistrator;
         this.language = language;
+        this.createDate = createDate;
         this.editDate = editDate;
         this.deleteDate = deleteDate;
     }
@@ -86,6 +89,14 @@ public class User {
         this.language = language;
     }
 
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
     public LocalDateTime getEditDate() {
         return editDate;
     }
@@ -100,5 +111,59 @@ public class User {
 
     public void setDeleteDate(LocalDateTime deleteDate) {
         this.deleteDate = deleteDate;
+    }
+
+    public static UserBuilder builder(){
+        return new UserBuilder();
+    }
+
+    public static class UserBuilder{
+        private Long id;
+        private String login;
+        private String password;
+        private boolean emailConfirmedRegistrator;
+        private String language;
+        private LocalDateTime createDate;
+        private LocalDateTime editDate;
+        private LocalDateTime deleteDate;
+
+        public UserBuilder id(Long id){
+            this.id = id;
+            return this;
+        }
+        public UserBuilder login(String login){
+            this.login = login;
+            return this;
+        }
+        public UserBuilder password(String password){
+            this.password = password;
+            return this;
+        }
+        public UserBuilder emailConfirmedRegistrator(boolean emailConfirmedRegistrator){
+            this.emailConfirmedRegistrator = emailConfirmedRegistrator;
+            return this;
+        }
+
+        public UserBuilder language(String language){
+            this.language = language;
+            return this;
+        }
+        public UserBuilder createDate(LocalDateTime createDate){
+            this.createDate = createDate;
+            return this;
+        }
+        public UserBuilder editDate(LocalDateTime editDate){
+            this.editDate = editDate;
+            return this;
+        }
+        public UserBuilder deleteDate(LocalDateTime deleteDate){
+            this.deleteDate = deleteDate;
+            return this;
+        }
+        public User build(){
+            return new User(id, login, password, emailConfirmedRegistrator, language, createDate, editDate, deleteDate);
+        }
+
+
     }
 }

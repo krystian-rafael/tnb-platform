@@ -8,32 +8,30 @@ public class UserData {
     private String password;
     private boolean emailConfirmedRegistrator;
     private String language;
+    private LocalDateTime createDate;
     private LocalDateTime editDate;
     private LocalDateTime deleteDate;
 
-    public UserData() {
-    }
 
-    public UserData(Long id, String login, String password, boolean emailConfirmedRegistrator, String language, LocalDateTime editDate, LocalDateTime deleteDate) {
+
+    public UserData(Long id, String login, String password, boolean emailConfirmedRegistrator, String language, LocalDateTime createDate, LocalDateTime editDate, LocalDateTime deleteDate) {
         this.id = id;
         this.login = login;
         this.password = password;
         this.emailConfirmedRegistrator = emailConfirmedRegistrator;
         this.language = language;
+        this.createDate = createDate;
         this.editDate = editDate;
         this.deleteDate = deleteDate;
     }
-
-    public UserData(String login, String password, boolean emailConfirmedRegistrator, String language) {
+    public UserData(String login, String password,String language, LocalDateTime createDate) {
         this.login = login;
         this.password = password;
-        this.emailConfirmedRegistrator = emailConfirmedRegistrator;
         this.language = language;
-
+        this.createDate = createDate;
     }
-
-    public Long getId() {
-        return id;
+    public UserData() {
+        
     }
 
     public void setId(Long id) {
@@ -72,6 +70,14 @@ public class UserData {
         this.language = language;
     }
 
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
     public LocalDateTime getEditDate() {
         return editDate;
     }
@@ -88,5 +94,69 @@ public class UserData {
         this.deleteDate = deleteDate;
     }
 
+    public UserData(String login, String password, boolean emailConfirmedRegistrator, String language) {
+        this.login = login;
+        this.password = password;
+        this.emailConfirmedRegistrator = emailConfirmedRegistrator;
+        this.language = language;
+
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public static UserDataBuilder builder(){
+        return new UserDataBuilder();
+    }
+    public static class UserDataBuilder{
+        private Long id;
+        private String login;
+        private String password;
+        private boolean emailConfirmedRegistrator;
+        private String language;
+        private LocalDateTime createDate;
+        private LocalDateTime editDate;
+        private LocalDateTime deleteDate;
+
+        public UserDataBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+        public UserDataBuilder login(String login) {
+            this.login = login;
+            return this;
+        }
+        public UserDataBuilder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public UserDataBuilder emailConfirmedRegistrator(boolean emailConfirmedRegistrator) {
+            this.emailConfirmedRegistrator = emailConfirmedRegistrator;
+            return this;
+        }
+        public UserDataBuilder language(String language) {
+            this.language = language;
+            return this;
+        }
+        public UserDataBuilder createDate(LocalDateTime createDate) {
+            this.createDate = createDate;
+            return this;
+        }
+        public UserDataBuilder editDate(LocalDateTime editDate) {
+            this.editDate = editDate;
+            return this;
+        }
+        public UserDataBuilder deleteDate(LocalDateTime deleteDate) {
+            this.deleteDate = deleteDate;
+            return this;
+        }
+        public UserData build() {
+            return new UserData(id, login, password, emailConfirmedRegistrator, language, createDate, editDate, deleteDate);
+        }
+
+
+    }
 
 }

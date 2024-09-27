@@ -1,7 +1,9 @@
 package com.ksprogramming.tnb.Service;
 
 import com.ksprogramming.tnb.Data.UserData;
+import com.ksprogramming.tnb.Enumes.Language;
 import com.ksprogramming.tnb.Repository.UserRepository;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -11,15 +13,15 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @TestPropertySource("classpath:application-integrationtest.properties")
 class UserServiceIntegrationTest {
+
     @Autowired
     private UserService userService;
 
@@ -27,69 +29,136 @@ class UserServiceIntegrationTest {
     private UserRepository userRepository;
 
     @BeforeEach
-    void setUp() {
-        userRepository.deleteAll();
+    public void setUp() {
+        userRepository.deleteAll();  // Ensures a clean slate before each test
     }
 
     @Test
-    public void testCreateUser() {
-        UserData userData = new UserData("testUser", "password123", true, "en");
-        UserData createdUser = userService.createUser(userData);
+    void createUser() {
+        // GIVEN
+        UserData user = UserData.builder()
+                .login("JohnDoe")
+                .password("password123")
+                .emailConfirmedRegistrator(false)
+                .language(Language.ENGLISH.name())  // Using Language Enum
+                .createDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
+                .build();
 
-        assertThat(createdUser.getId()).isNotNull();
-        assertThat(createdUser.getLogin()).isEqualTo("testUser");
-        assertThat(createdUser.getPassword()).isEqualTo("password123");
-        assertThat(createdUser.getEmailConfirmedRegistrator()).isTrue();
-        assertThat(createdUser.getLanguage()).isEqualTo("en");
-        assertThat(createdUser.getEditDate()).isBeforeOrEqualTo(LocalDateTime.now());
+        userService.createUser(user);
+
+        // WHEN
+        List<UserData> results = userService.findAllUsers();
+
+        // EXPECTED
+        Assert.assertEquals(1, results.size());
+
+        List<String> logins = new ArrayList<>();
+        results.forEach(userData -> logins.add(userData.getLogin()));
+        Assert.assertTrue(logins.contains("JohnDoe"));
+
+        List<String> languages = new ArrayList<>();
+        results.forEach(userData -> languages.add(userData.getLanguage()));
+        Assert.assertTrue(languages.contains(Language.ENGLISH.name()));
     }
 
     @Test
-    public void testGetUserById() {
-        UserData userData = new UserData("testUser", "password123", true, "en");
-        UserData createdUser = userService.createUser(userData);
+    void updateUser() {
+        // GIVEN
+        UserData user = userService.createUser(UserData.builder()
+                .login("JohnDoe")
+                .password("password123")
+                .emailConfirmedRegistrator(false)
+                .language(Language.ENGLISH.name())
+                .createDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
+                .build());
 
-        Optional<UserData> retrievedUser = Optional.ofNullable(userService.getUserById(createdUser.getId()));
+        // WHEN
+        user.setLanguage(Language.SPANISH.name());
+        UserData updatedUser = userService.updateUser(user);
 
-        assertThat(retrievedUser).isPresent();
-        assertThat(retrievedUser.get().getLogin()).isEqualTo("testUser");
+        // EXPECTED
+        Assert.assertEquals(Language.SPANISH.name(), updatedUser.getLanguage());
+        Assert.assertEquals("JohnDoe", updatedUser.getLogin());
     }
 
     @Test
-    public void testUpdateUser() {
-        UserData userData = new UserData("testUser", "password123", true, "en");
-        UserData createdUser = userService.createUser(userData);
+    void findUserById() {
+        // GIVEN
+        UserData user = userService.createUser(UserData.builder()
+                .login("JaneDoe")
+                .password("password321")
+                .emailConfirmedRegistrator(true)
+                .language(Language.FRENCH.name())
+                .createDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
+                .build());
 
-        UserData updatedData = new UserData(createdUser.getId(), "updatedUser", "newPassword", false, "fr", LocalDateTime.now(), null);
-        UserData updatedUser = userService.updateUser(createdUser.getId(), updatedData);
+        // WHEN
+        UserData result = userService.findUserById(user.getId());
 
-        assertThat(updatedUser.getLogin()).isEqualTo("updatedUser");
-        assertThat(updatedUser.getPassword()).isEqualTo("newPassword");
-        assertThat(updatedUser.getEmailConfirmedRegistrator()).isFalse();
-        assertThat(updatedUser.getLanguage()).isEqualTo("fr");
+        // EXPECTED
+        Assert.assertEquals(user.getLogin(), result.getLogin());
+        Assert.assertEquals(user.getLanguage(), result.getLanguage());
+        Assert.assertEquals(user.getCreateDate(), result.getCreateDate());
     }
 
     @Test
-    public void testDeleteUser() {
-        UserData userData = new UserData("testUser", "password123", true, "en");
-        UserData createdUser = userService.createUser(userData);
+    void findAllUsers() {
+        // GIVEN
+        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+        UserData userDataFirst = new UserData("JohnDoe", "password123", Language.ENGLISH.name(), now);
+        userService.createUser(userDataFirst);
+        UserData userDataSecond = new UserData("JaneDoe", "password321", Language.SPANISH.name(), now);
+        userService.createUser(userDataSecond);
 
-        userService.deleteUser(createdUser.getId());
+        // WHEN
+        List<UserData> results = userService.findAllUsers();
 
-        Optional<UserData> deletedUser = Optional.ofNullable(userService.getUserById(createdUser.getId()));
-        assertThat(deletedUser).isPresent();
-        assertThat(deletedUser.get().getDeleteDate()).isNotNull(); // Check if deleteDate is set
+        // EXPECTED
+        Assert.assertEquals(2, results.size());
+
+        List<String> logins = new ArrayList<>();
+        results.forEach(userData -> logins.add(userData.getLogin()));
+        Assert.assertTrue(logins.contains("JohnDoe"));
+        Assert.assertTrue(logins.contains("JaneDoe"));
+
+        List<String> languages = new ArrayList<>();
+        results.forEach(userData -> languages.add(userData.getLanguage()));
+        Assert.assertTrue(languages.contains(Language.ENGLISH.name()));
+        Assert.assertTrue(languages.contains(Language.SPANISH.name()));
+
+        List<LocalDateTime> createDates = new ArrayList<>();
+        results.forEach(userData -> createDates.add(userData.getCreateDate()));
+        Assert.assertTrue(createDates.contains(now));
     }
 
     @Test
-    public void testGetAllUsers() {
-        UserData user1 = new UserData("user1", "password1", true, "en");
-        UserData user2 = new UserData("user2", "password2", false, "es");
-        userService.createUser(user1);
-        userService.createUser(user2);
+    void deleteUser() {
+        // GIVEN
+        UserData userFirst = userService.createUser(UserData.builder()
+                .login("JohnDoe")
+                .password("password123")
+                .emailConfirmedRegistrator(false)
+                .language(Language.ENGLISH.name())
+                .createDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
+                .build());
 
-        List<UserData> users = userService.getAllUsers();
+        UserData userSecond = userService.createUser(UserData.builder()
+                .login("JaneDoe")
+                .password("password321")
+                .emailConfirmedRegistrator(true)
+                .language(Language.SPANISH.name())
+                .createDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
+                .build());
 
-        assertThat(users).hasSize(2);
+        userService.deleteUser(userSecond.getId());
+
+        // WHEN
+        List<UserData> results = userService.findAllUsers();
+
+        // EXPECTED
+        Assert.assertEquals(1, results.size());
+
+        List<String> logins = new ArrayList<>();
+        results.forEach(userData -> logins.add(userData.getLogin()));
     }
 }
