@@ -2,6 +2,7 @@ package com.ksprogramming.tnb.Enumes;
 
 
 public enum Language {
+    POLISH("Polish"),
     ENGLISH("English"),
     SPANISH("Spanish"),
     FRENCH("French"),
