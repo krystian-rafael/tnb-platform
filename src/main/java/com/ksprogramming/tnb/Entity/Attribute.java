@@ -1,11 +1,11 @@
 package com.ksprogramming.tnb.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Attribute {
@@ -14,6 +14,8 @@ public class Attribute {
     private Long id;
     private String name;
     private String type;
+    @OneToMany(mappedBy = "attribute")
+    private List<AssignedAttribute> assignedAttributes;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
     private LocalDateTime deleteDate;
@@ -21,10 +23,11 @@ public class Attribute {
     public Attribute() {
     }
 
-    public Attribute(Long id, String name, String type, LocalDateTime createDate, LocalDateTime updateDate, LocalDateTime deleteDate) {
+    public Attribute(Long id, String name, String type, List<AssignedAttribute> assignedAttributes, LocalDateTime createDate, LocalDateTime updateDate, LocalDateTime deleteDate) {
         this.id = id;
         this.name = name;
         this.type = type;
+        this.assignedAttributes = assignedAttributes;
         this.createDate = createDate;
         this.updateDate = updateDate;
         this.deleteDate = deleteDate;
@@ -41,6 +44,8 @@ public class Attribute {
     public String getType() {
         return type;
     }
+
+    public List<AssignedAttribute> getAssignedAttributes() { return assignedAttributes; }
 
     public LocalDateTime getCreateDate() {
         return createDate;
@@ -61,6 +66,7 @@ public class Attribute {
         private Long id;
         private String name;
         private String type;
+        private List<AssignedAttribute> assignedAttributes;
         private LocalDateTime createDate;
         private LocalDateTime updateDate;
         private LocalDateTime deleteDate;
@@ -77,6 +83,12 @@ public class Attribute {
             this.type = type;
             return this;
         }
+
+        public AttributeBuilder assignedAttributes(List<AssignedAttribute> assignedAttributes){
+            this.assignedAttributes = assignedAttributes;
+            return this;
+        }
+
         public AttributeBuilder createDate(LocalDateTime createDate){
             this.createDate = createDate;
             return this;
@@ -90,7 +102,7 @@ public class Attribute {
             return this;
         }
         public Attribute build(){
-            return new Attribute(id, name, type, createDate, updateDate, deleteDate);
+            return new Attribute(id, name, type, assignedAttributes, createDate, updateDate, deleteDate);
         }
     }
 }

@@ -2,6 +2,8 @@ package com.ksprogramming.tnb.Entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Equipment {
@@ -18,6 +20,8 @@ public class Equipment {
     @JoinColumn(name = "image_id")
     private Image image;
 
+    @OneToMany(mappedBy = "equipment")
+    private List<AssignedAttribute> assignedAttributes;
     private String name;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
@@ -26,10 +30,11 @@ public class Equipment {
     public Equipment() {
     }
 
-    public Equipment(Long id, User user, Image image, String name, LocalDateTime createDate, LocalDateTime updateDate, LocalDateTime deleteDate) {
+    public Equipment(Long id, User user, Image image, List<AssignedAttribute> assignedAttributes, String name, LocalDateTime createDate, LocalDateTime updateDate, LocalDateTime deleteDate) {
         this.id = id;
         this.user = user;
         this.image = image;
+        this.assignedAttributes = assignedAttributes;
         this.name = name;
         this.createDate = createDate;
         this.updateDate = updateDate;
@@ -110,12 +115,20 @@ public class Equipment {
         return new EquipmentBuilder();
     }
 
+    public List<AssignedAttribute> getAssignedAttributes() {
+        return assignedAttributes;
+    }
+
+    public void setAssignedAttributes(List<AssignedAttribute> assignedAttributes) {
+        this.assignedAttributes = assignedAttributes;
+    }
 
     public static class EquipmentBuilder {
         private Long id;
         private User user;
         private Image image;
         private String name;
+        private List<AssignedAttribute> assignedAttributes;
         private LocalDateTime createDate;
         private LocalDateTime updateDate;
         private LocalDateTime deleteDate;
@@ -140,6 +153,11 @@ public class Equipment {
             return this;
         }
 
+        public EquipmentBuilder assignedAttributes(List<AssignedAttribute> assignedAttributes) {
+            this.assignedAttributes = assignedAttributes;
+            return this;
+        }
+
         public EquipmentBuilder createDate(LocalDateTime createDate) {
             this.createDate = createDate;
             return this;
@@ -156,7 +174,7 @@ public class Equipment {
         }
 
         public Equipment build() {
-            return new Equipment(id, user, image, name, createDate, updateDate, deleteDate);
+            return new Equipment(id, user, image, assignedAttributes, name, createDate, updateDate, deleteDate);
         }
     }
 }

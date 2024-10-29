@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class EquipmentMapper {
 
     // Converts Equipment entity to EquipmentData DTO
-    public EquipmentData toData(Equipment equipment) {
+    public static EquipmentData toData(Equipment equipment) {
         return new EquipmentData(
                 equipment.getId(),
                 equipment.getName(),
@@ -20,7 +20,7 @@ public class EquipmentMapper {
     }
 
 
-    public Equipment toEntity(EquipmentData equipmentData) {
+    public static Equipment toEntity(EquipmentData equipmentData) {
         Equipment equipment = new Equipment();
         equipment.setId(equipmentData.getId());
         equipment.setName(equipmentData.getName());
